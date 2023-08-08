@@ -8,6 +8,7 @@ import com.redveloper.news.domain.model.HeadlineNews
 import com.redveloper.news.domain.usecase.GetHeadlinesNewsUseCase
 import com.redveloper.news.utils.Event
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
@@ -30,6 +31,8 @@ class NewsArticelViewModel @Inject constructor(
         )
     }
 
+    val source = MutableStateFlow("")
+
     val articelsEvent = MutableLiveData<Event<List<HeadlineNews>>>()
     val errorArticelEvent = MutableLiveData<Event<String>>()
 
@@ -44,9 +47,11 @@ class NewsArticelViewModel @Inject constructor(
             Event(it)
         }.asLiveData()
 
-    fun getListArticel(source: String, query: String = ""){
+    fun getListArticel(query: String = ""){
         viewModelScope.launch {
-            getHeadlinesNewsUseCase.execute(source = source, query = query)
+            source.collectLatest {
+                getHeadlinesNewsUseCase.execute(source = it, query = query)
+            }
         }
     }
 

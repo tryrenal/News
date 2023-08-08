@@ -38,7 +38,12 @@ class WebviewActivity : ComponentActivity() {
 
                     intent.extras?.let {
                         val url = it.getString(KEY_URL, "")
-                        WebviewScreen(url = url)
+                        WebviewScreen(
+                            url = url,
+                            onBackPress = {
+                                finish()
+                            }
+                        )
                     }
 
                 }
@@ -61,7 +66,8 @@ class WebviewActivity : ComponentActivity() {
 @Composable
 fun WebviewScreen(
     modifier: Modifier = Modifier,
-    url: String
+    url: String,
+    onBackPress: () -> Unit
 ){
     Scaffold(
         modifier = modifier
@@ -75,7 +81,7 @@ fun WebviewScreen(
                         contentDescription = "",
                         modifier = Modifier
                             .clickable {
-
+                                onBackPress()
                             }
                     )
                 }

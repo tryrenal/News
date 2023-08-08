@@ -1,7 +1,6 @@
 package com.redveloper.news.api
 
 import com.redveloper.news.domain.enums.NewsCategoryEnum
-import com.redveloper.news.domain.model.HeadlineNews
 import com.redveloper.news.domain.model.RootHeadlineNews
 import com.redveloper.news.domain.model.SourceNews
 import com.redveloper.news.domain.repository.api.NewsApi

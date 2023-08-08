@@ -16,10 +16,16 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -78,15 +84,16 @@ class NewsArticelActivity : ComponentActivity() {
 
                     searchArticelEvent?.contentIfNotHaveBeenHandle?.let { query ->
                         articels.clear()
-                        viewModel.getListArticel(
-                            source = "australian-financial-review",
-                            query = query
-                        )
+                        viewModel.getListArticel(query = query)
                     }
 
                     LaunchedEffect(true){
                         articels.clear()
-                        viewModel.getListArticel("australian-financial-review")
+
+                        intent.extras?.getString(KEY_SOURCE)?.let { source ->
+                            viewModel.source.value = source
+                            viewModel.getListArticel()
+                        }
                     }
 
                     NewsArticelScreen(
@@ -102,6 +109,9 @@ class NewsArticelActivity : ComponentActivity() {
                             lifecycleScope.launch {
                                 viewModel.searchQuery.value = it
                             }
+                        },
+                        onBackPress = {
+                            finish()
                         }
                     )
                 }
@@ -110,60 +120,93 @@ class NewsArticelActivity : ComponentActivity() {
     }
 
     companion object{
-        fun navigate(activity: Activity){
+        private const val KEY_SOURCE = "KEY_SOURCE"
+
+        fun navigate(activity: Activity, source: String){
             val intent = Intent(activity, NewsArticelActivity::class.java)
+            intent.putExtra(KEY_SOURCE, source)
             activity.startActivity(intent)
         }
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewsArticelScreen(
     modifier: Modifier = Modifier,
     articels: List<HeadlineNews>,
     onLoadMore: () -> Unit,
     onSelectedArticel: (url: String) -> Unit,
-    onSearch: (String) -> Unit
+    onSearch: (String) -> Unit,
+    onBackPress: () -> Unit
 ) {
 
     val listState = rememberLazyListState()
     val searchText = remember { mutableStateOf("") }
 
-    Column(
+    Scaffold(
         modifier = modifier
-            .fillMaxSize()
-    ) {
-        OutlinedTextField(
-            value = searchText.value,
-            onValueChange = {
-                searchText.value = it
-                onSearch(it) // Call the search callback with the updated query
-            },
-            label = { Text("Search") },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        )
-
-        LazyColumn(
-            state = listState,
-            content = {
-                items(articels){ data ->
-                    CardArticel(
-                        title = data.title ?: "",
-                        author = data.author ?: "",
+            .fillMaxSize(),
+        topBar = {
+            TopAppBar(
+                title = {},
+                navigationIcon = {
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = "",
                         modifier = Modifier
-                            .padding(bottom = 10.dp)
                             .clickable {
-                                data.url?.let {
-                                    onSelectedArticel.invoke(it)
-                                }
+                                onBackPress()
                             }
                     )
                 }
-            }
-        )
+            )
+        }
+    ) { innerPadding ->
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+        ) {
+            OutlinedTextField(
+                value = searchText.value,
+                onValueChange = {
+                    searchText.value = it
+                    onSearch(it) // Call the search callback with the updated query
+                },
+                label = { Text("Search") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        horizontal = 10.dp,
+                        vertical = 20.dp
+                    )
+            )
 
+            LazyColumn(
+                state = listState,
+                content = {
+                    items(articels){ data ->
+                        CardArticel(
+                            title = data.title ?: "",
+                            author = data.author ?: "",
+                            modifier = Modifier
+                                .padding(
+                                    bottom = 10.dp,
+                                    start = 20.dp,
+                                    end = 20.dp
+                                )
+                                .clickable {
+                                    data.url?.let {
+                                        onSelectedArticel.invoke(it)
+                                    }
+                                }
+                        )
+                    }
+                }
+            )
+
+        }
     }
 
     listState.OnBottomReached() {

@@ -6,15 +6,18 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.redveloper.news.MyApp
 import com.redveloper.news.domain.enums.NewsCategoryEnum
 import com.redveloper.news.ui.ViewModelFactory
@@ -55,8 +58,7 @@ class CategoryNewsActivity : ComponentActivity() {
                         modifier = Modifier
                             .fillMaxSize(),
                         onCategorySelected = {
-//                            SourceNewsActivity.navigate(this, it)
-                            NewsArticelActivity.navigate(this)
+                            SourceNewsActivity.navigate(this, it)
                         }
                     )
                 }
@@ -78,17 +80,24 @@ fun CategoryNewsScreen(
         categoryNews.addAll(it)
     }
 
-    LazyColumn(
+    Scaffold(
         modifier = modifier
-    ){
-        items(categoryNews){ data ->
-            CardCategory(
-                data = data,
-                modifier = Modifier
-                    .clickable {
-                        onCategorySelected.invoke(data)
-                    }
-            )
+            .fillMaxSize()
+    ) { innerPadding ->
+        LazyColumn(
+            modifier = Modifier
+                .padding(innerPadding)
+                .padding(horizontal = 10.dp, vertical = 20.dp)
+        ){
+            items(categoryNews){ data ->
+                CardCategory(
+                    data = data,
+                    modifier = Modifier
+                        .clickable {
+                            onCategorySelected.invoke(data)
+                        }
+                )
+            }
         }
     }
 }

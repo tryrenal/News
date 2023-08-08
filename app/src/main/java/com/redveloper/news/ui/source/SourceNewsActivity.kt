@@ -1,5 +1,7 @@
-package com.redveloper.news
+package com.redveloper.news.ui.source
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -8,20 +10,19 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import com.redveloper.news.MyApp
 import com.redveloper.news.domain.enums.NewsCategoryEnum
 import com.redveloper.news.ui.ViewModelFactory
 import com.redveloper.news.ui.source.SourceNewsViewModel
 import com.redveloper.news.ui.theme.NewsTheme
 import javax.inject.Inject
 
-class MainActivity : ComponentActivity() {
+class SourceNewsActivity : ComponentActivity() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -42,10 +43,29 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    intent.extras?.let {
+                        val strCategory = it.getString(KEY_CATEGORY, null)
+                        strCategory?.let {
+                            val category = NewsCategoryEnum.valueOf(it)
+                            LaunchedEffect(true){
+                                viewModel.getSourcesNews(category)
+                            }
+                        }
+                    }
 
                     MainScreen(viewModel = viewModel)
                 }
             }
+        }
+    }
+
+    companion object{
+        private const val KEY_CATEGORY = "KEY_CATEGORY"
+
+        fun navigate(activity: Activity, category: NewsCategoryEnum){
+            val intent = Intent(activity, SourceNewsActivity::class.java)
+            intent.putExtra(KEY_CATEGORY, category.name)
+            activity.startActivity(intent)
         }
     }
 }

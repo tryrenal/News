@@ -1,8 +1,9 @@
 package com.redveloper.news.di
 
 import androidx.lifecycle.ViewModelProvider
-import com.redveloper.news.MainActivity
 import com.redveloper.news.MyApp
+import com.redveloper.news.ui.category.CategoryNewsActivity
+import com.redveloper.news.ui.source.SourceNewsActivity
 import dagger.BindsInstance
 import dagger.Component
 import retrofit2.Retrofit
@@ -29,5 +30,6 @@ interface ApplicationComponent {
     fun retrofit(): Retrofit
 
     fun viewModelProviderFactory(): ViewModelProvider.Factory
-    fun inject(mainActivity: MainActivity)
+    fun inject(categoryNewsActivity: CategoryNewsActivity)
+    fun inject(sourcesNewsActivity: SourceNewsActivity)
 }

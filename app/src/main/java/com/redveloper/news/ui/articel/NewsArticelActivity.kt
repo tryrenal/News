@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -30,6 +31,7 @@ import com.redveloper.news.domain.model.HeadlineNews
 import com.redveloper.news.ui.ViewModelFactory
 import com.redveloper.news.ui.components.CardArticel
 import com.redveloper.news.ui.theme.NewsTheme
+import com.redveloper.news.ui.webview.WebviewActivity
 import javax.inject.Inject
 
 class NewsArticelActivity : ComponentActivity() {
@@ -73,10 +75,14 @@ class NewsArticelActivity : ComponentActivity() {
 
                     NewsArticelScreen(
                         modifier = Modifier.fillMaxSize(),
-                        articels = articels
-                    ) {
-                        viewModel.loadMore()
-                    }
+                        articels = articels,
+                        onLoadMore = {
+                            viewModel.loadMore()
+                        },
+                        onSelectedArticel = { url ->
+                            WebviewActivity.navigate(this, url)
+                        }
+                    )
                 }
             }
         }
@@ -94,7 +100,8 @@ class NewsArticelActivity : ComponentActivity() {
 fun NewsArticelScreen(
     modifier: Modifier = Modifier,
     articels: List<HeadlineNews>,
-    onLoadMore: () -> Unit
+    onLoadMore: () -> Unit,
+    onSelectedArticel: (url: String) -> Unit
 ) {
 
     val listState = rememberLazyListState()
@@ -110,6 +117,11 @@ fun NewsArticelScreen(
                     author = data.author ?: "",
                     modifier = Modifier
                         .padding(bottom = 10.dp)
+                        .clickable {
+                            data.url?.let {
+                                onSelectedArticel.invoke(it)
+                            }
+                        }
                 )
             }
         }

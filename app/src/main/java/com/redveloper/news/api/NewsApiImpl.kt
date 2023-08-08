@@ -20,11 +20,12 @@ class NewsApiImpl @Inject constructor(
 
     override suspend fun getHeadlinesNews(
         source: String,
+        query: String,
         page: Int,
         pageSize: Int
     ): RootHeadlineNews {
         return apiService.getHeadlinesNews(
-            sources = source, page = page, pageSize = pageSize
+            sources = source, page = page, pageSize = pageSize, query = query
         ).toRootHeadlineNews()
     }
 }

@@ -14,11 +14,12 @@ class GetHeadlinesNewsUseCase @Inject constructor(
     private var lastInput: Input? = null
     var output: Output? = null
 
-    suspend fun execute(source: String){
+    suspend fun execute(source: String, query: String = ""){
         nextPage = 1
         lastInput = Input(
             page = nextPage,
-            source = source
+            source = source,
+            query = query
         )
 
         lastInput?.let { input ->
@@ -31,7 +32,8 @@ class GetHeadlinesNewsUseCase @Inject constructor(
             lastInput?.let { input ->
                 getHeadlines(Input(
                     page = nextPage,
-                    source = input.source
+                    source = input.source,
+                    query = input.query
                 ))
             }
         }
@@ -41,7 +43,8 @@ class GetHeadlinesNewsUseCase @Inject constructor(
         newsRespository.getHeadlinesNews(
             source = input.source,
             page = input.page,
-            pageSize = 20
+            pageSize = 20,
+            query = input.query
         ).collect{ result ->
             when(result){
                 is Result.Success -> {
@@ -60,7 +63,8 @@ class GetHeadlinesNewsUseCase @Inject constructor(
 
     data class Input(
         val page: Int,
-        val source: String
+        val source: String,
+        val query: String
     )
 
     data class Output(

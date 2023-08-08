@@ -28,13 +28,14 @@ class NewsRespository @Inject constructor(
 
     fun getHeadlinesNews(
         source: String,
+        query: String,
         page: Int,
         pageSize: Int
     ): Flow<Result<RootHeadlineNews>>{
         return flow {
             try {
                 val data = newsApi.getHeadlinesNews(
-                    source = source, page = page, pageSize = pageSize)
+                    query = query, source = source, page = page, pageSize = pageSize)
                 emit(Result.Success(data))
             }catch (e: Exception){
                 emit(Result.Error(e.message.toString()))

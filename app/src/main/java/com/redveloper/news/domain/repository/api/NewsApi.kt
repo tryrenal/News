@@ -12,6 +12,7 @@ interface NewsApi {
 
     suspend fun getHeadlinesNews(
         source: String,
+        query: String,
         page: Int,
         pageSize: Int
     ): RootHeadlineNews

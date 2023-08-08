@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import com.redveloper.news.MyApp
 import com.redveloper.news.domain.enums.NewsCategoryEnum
 import com.redveloper.news.ui.ViewModelFactory
+import com.redveloper.news.ui.articel.NewsArticelActivity
 import com.redveloper.news.ui.components.CardCategory
 import com.redveloper.news.ui.source.SourceNewsActivity
 import com.redveloper.news.ui.theme.NewsTheme
@@ -54,7 +55,8 @@ class CategoryNewsActivity : ComponentActivity() {
                         modifier = Modifier
                             .fillMaxSize(),
                         onCategorySelected = {
-                            SourceNewsActivity.navigate(this, it)
+//                            SourceNewsActivity.navigate(this, it)
+                            NewsArticelActivity.navigate(this)
                         }
                     )
                 }

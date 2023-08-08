@@ -1,6 +1,8 @@
 package com.redveloper.news.api
 
 import com.redveloper.news.domain.enums.NewsCategoryEnum
+import com.redveloper.news.domain.model.HeadlineNews
+import com.redveloper.news.domain.model.RootHeadlineNews
 import com.redveloper.news.domain.model.SourceNews
 import com.redveloper.news.domain.repository.api.NewsApi
 import javax.inject.Inject
@@ -14,5 +16,15 @@ class NewsApiImpl @Inject constructor(
         ).sources.map {
             it.toSourceNews()
         }
+    }
+
+    override suspend fun getHeadlinesNews(
+        source: String,
+        page: Int,
+        pageSize: Int
+    ): RootHeadlineNews {
+        return apiService.getHeadlinesNews(
+            sources = source, page = page, pageSize = pageSize
+        ).toRootHeadlineNews()
     }
 }

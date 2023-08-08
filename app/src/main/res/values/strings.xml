@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">News</string>
     <string name="title_activity_category_news">CategoryNewsActivity</string>
+    <string name="title_activity_news_articel">NewsArticelActivity</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.redveloper.news.api.response
+package com.redveloper.news.api.response.source
 
 import com.google.gson.annotations.SerializedName
 import com.redveloper.news.domain.model.SourceNews

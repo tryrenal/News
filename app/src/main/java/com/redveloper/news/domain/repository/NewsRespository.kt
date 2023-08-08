@@ -1,6 +1,8 @@
 package com.redveloper.news.domain.repository
 
 import com.redveloper.news.domain.enums.NewsCategoryEnum
+import com.redveloper.news.domain.model.HeadlineNews
+import com.redveloper.news.domain.model.RootHeadlineNews
 import com.redveloper.news.domain.model.SourceNews
 import com.redveloper.news.domain.repository.api.NewsApi
 import kotlinx.coroutines.Dispatchers
@@ -17,6 +19,22 @@ class NewsRespository @Inject constructor(
         return flow {
             try {
                 val data = newsApi.getSourceNews(categoryEnum)
+                emit(Result.Success(data))
+            }catch (e: Exception){
+                emit(Result.Error(e.message.toString()))
+            }
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun getHeadlinesNews(
+        source: String,
+        page: Int,
+        pageSize: Int
+    ): Flow<Result<RootHeadlineNews>>{
+        return flow {
+            try {
+                val data = newsApi.getHeadlinesNews(
+                    source = source, page = page, pageSize = pageSize)
                 emit(Result.Success(data))
             }catch (e: Exception){
                 emit(Result.Error(e.message.toString()))

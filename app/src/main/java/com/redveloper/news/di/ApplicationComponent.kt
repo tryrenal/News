@@ -2,6 +2,7 @@ package com.redveloper.news.di
 
 import androidx.lifecycle.ViewModelProvider
 import com.redveloper.news.MyApp
+import com.redveloper.news.ui.articel.NewsArticelActivity
 import com.redveloper.news.ui.category.CategoryNewsActivity
 import com.redveloper.news.ui.source.SourceNewsActivity
 import dagger.BindsInstance
@@ -32,4 +33,5 @@ interface ApplicationComponent {
     fun viewModelProviderFactory(): ViewModelProvider.Factory
     fun inject(categoryNewsActivity: CategoryNewsActivity)
     fun inject(sourcesNewsActivity: SourceNewsActivity)
+    fun inject(newsArticelActivity: NewsArticelActivity)
 }

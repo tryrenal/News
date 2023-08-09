@@ -5,14 +5,19 @@ import com.redveloper.news.domain.model.HeadlineNews
 import com.redveloper.news.domain.model.RootHeadlineNews
 import com.redveloper.news.domain.model.SourceNews
 import com.redveloper.news.domain.repository.api.NewsApi
+import com.redveloper.news.domain.repository.database.FavoriteNewsLocal
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class NewsRespository @Inject constructor(
-    private val newsApi: NewsApi
+    private val newsApi: NewsApi,
+    private val favoriteNewsLocal: FavoriteNewsLocal
 ) {
 
     fun getSourceNews(categoryEnum: NewsCategoryEnum): Flow<Result<List<SourceNews>>>{
@@ -41,5 +46,36 @@ class NewsRespository @Inject constructor(
                 emit(Result.Error(e.message.toString()))
             }
         }.flowOn(Dispatchers.IO)
+    }
+
+    fun getFavoritesNews(): Flow<Result<List<HeadlineNews>>>{
+        return favoriteNewsLocal.getFavoritesNews()
+            .map { Result.Success(it) }
+            .catch {
+                Result.Error(it.message.toString())
+            }
+            .flowOn(Dispatchers.IO)
+    }
+
+    suspend fun insertFavoriteNews(data: HeadlineNews): Result<Unit> {
+        return try {
+            withContext(Dispatchers.IO) {
+                favoriteNewsLocal.insertFavoriteNews(data)
+            }
+            Result.Success(Unit)
+        } catch (e: Exception){
+            Result.Error(e.message.toString())
+        }
+    }
+
+    suspend fun deleteFavoriteNews(id: Int): Result<Unit>{
+        return try {
+            withContext(Dispatchers.IO){
+                favoriteNewsLocal.deleteFavoriteNews(newsId = id)
+            }
+            Result.Success(Unit)
+        } catch (e: Exception){
+            Result.Error(e.message.toString())
+        }
     }
 }

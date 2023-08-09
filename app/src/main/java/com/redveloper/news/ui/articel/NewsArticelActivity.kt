@@ -12,12 +12,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -34,12 +36,15 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import com.redveloper.news.MyApp
 import com.redveloper.news.domain.model.HeadlineNews
+import com.redveloper.news.domain.model.Item
 import com.redveloper.news.ui.ViewModelFactory
 import com.redveloper.news.ui.components.CardArticel
 import com.redveloper.news.ui.theme.NewsTheme
@@ -71,6 +76,7 @@ class NewsArticelActivity : ComponentActivity() {
                     val articelsEvent by viewModel.articelsEvent.observeAsState()
                     val searchArticelEvent by viewModel.searchResult.observeAsState()
                     val errorArticelEvent by viewModel.errorArticelEvent.observeAsState()
+                    val loadingEvent by viewModel.loadingEvent.observeAsState()
 
                     val articels = remember { mutableListOf<HeadlineNews>() }
 
@@ -114,6 +120,15 @@ class NewsArticelActivity : ComponentActivity() {
                             finish()
                         }
                     )
+
+                    loadingEvent?.contentIfNotHaveBeenHandle?.let { show ->
+                        if (show){
+                            CircularProgressIndicator(
+                                modifier = Modifier
+                                    .wrapContentSize(Alignment.Center)
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -178,8 +193,10 @@ fun NewsArticelScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
-                        horizontal = 10.dp,
-                        vertical = 20.dp
+                        top = 5.dp,
+                        start = 20.dp,
+                        end = 20.dp,
+                        bottom = 10.dp
                     )
             )
 
@@ -211,6 +228,41 @@ fun NewsArticelScreen(
 
     listState.OnBottomReached() {
         onLoadMore.invoke()
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewNewsArticelScreen(){
+    val articels = listOf(
+        HeadlineNews(
+            source = Item(
+                "id-source", "source"
+            ),
+            author = "author",
+            title = "title",
+            description = "description",
+            url = "url",
+            urlToImage = "url to image",
+            content = "content"
+        )
+    )
+    MaterialTheme{
+        NewsArticelScreen(
+            articels = articels,
+            onLoadMore = {
+
+            },
+            onSelectedArticel = {
+
+            },
+            onSearch = {
+
+            },
+            onBackPress = {
+
+            }
+        )
     }
 }
 

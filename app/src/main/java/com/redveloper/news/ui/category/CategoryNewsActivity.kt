@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -12,13 +13,20 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.redveloper.news.MyApp
+import com.redveloper.news.R
 import com.redveloper.news.domain.enums.NewsCategoryEnum
 import com.redveloper.news.ui.ViewModelFactory
 import com.redveloper.news.ui.articel.NewsArticelActivity
@@ -53,8 +61,14 @@ class CategoryNewsActivity : ComponentActivity() {
 
                     val categoryNewsEvent by viewModel.categoryNewsEvent.observeAsState()
 
+                    val categoryNews = remember { mutableListOf<NewsCategoryEnum>() }
+
+                    categoryNewsEvent?.contentIfNotHaveBeenHandle?.let {
+                        categoryNews.addAll(it)
+                    }
+
                     CategoryNewsScreen(
-                        categoryNewsEvent = categoryNewsEvent,
+                        categoryNews = categoryNews,
                         modifier = Modifier
                             .fillMaxSize(),
                         onCategorySelected = {
@@ -69,35 +83,60 @@ class CategoryNewsActivity : ComponentActivity() {
 
 @Composable
 fun CategoryNewsScreen(
-    categoryNewsEvent: Event<List<NewsCategoryEnum>>?,
+    categoryNews: List<NewsCategoryEnum>,
     modifier: Modifier = Modifier,
     onCategorySelected: (NewsCategoryEnum) -> Unit
 ) {
 
-    val categoryNews = remember { mutableListOf<NewsCategoryEnum>() }
 
-    categoryNewsEvent?.contentIfNotHaveBeenHandle?.let {
-        categoryNews.addAll(it)
-    }
 
     Scaffold(
         modifier = modifier
             .fillMaxSize()
     ) { innerPadding ->
-        LazyColumn(
+        Column(
             modifier = Modifier
                 .padding(innerPadding)
                 .padding(horizontal = 10.dp, vertical = 20.dp)
-        ){
-            items(categoryNews){ data ->
-                CardCategory(
-                    data = data,
-                    modifier = Modifier
-                        .clickable {
-                            onCategorySelected.invoke(data)
-                        }
+        ) {
+            Text(
+                text = stringResource(id = R.string.category),
+                style = TextStyle(
+                    fontWeight =  FontWeight.Bold,
+                    fontSize = 24.sp
                 )
+            )
+
+
+            LazyColumn(){
+                items(categoryNews){ data ->
+                    CardCategory(
+                        data = data,
+                        modifier = Modifier
+                            .clickable {
+                                onCategorySelected.invoke(data)
+                            }
+                    )
+                }
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewCategoryNewsScreen(){
+    val categorys = listOf(
+        NewsCategoryEnum.TECHNOLOGY,
+        NewsCategoryEnum.SPORTS,
+        NewsCategoryEnum.SCIENCE,
+    )
+    MaterialTheme{
+        CategoryNewsScreen(
+            categoryNews = categorys,
+            onCategorySelected = {
+
+            }
+        )
     }
 }

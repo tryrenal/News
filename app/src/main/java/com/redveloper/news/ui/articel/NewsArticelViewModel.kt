@@ -6,6 +6,7 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.redveloper.news.domain.model.HeadlineNews
 import com.redveloper.news.domain.usecase.GetHeadlinesNewsUseCase
+import com.redveloper.news.domain.usecase.favorite.SetFavoriteNewsUseCase
 import com.redveloper.news.utils.Event
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.cancellable
@@ -18,7 +19,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class NewsArticelViewModel @Inject constructor(
-    private val getHeadlinesNewsUseCase: GetHeadlinesNewsUseCase
+    private val getHeadlinesNewsUseCase: GetHeadlinesNewsUseCase,
+    private val setFavoriteNewsUseCase: SetFavoriteNewsUseCase
 ): ViewModel() {
 
     init {
@@ -39,6 +41,7 @@ class NewsArticelViewModel @Inject constructor(
     val articelsEvent = MutableLiveData<Event<List<HeadlineNews>>>()
     val errorArticelEvent = MutableLiveData<Event<String>>()
     val loadingEvent = MutableLiveData<Event<Boolean>>()
+    val addFavoriteEvent = MutableLiveData<Event<Any>>()
 
     val searchQuery = MutableStateFlow("")
     val searchResult = searchQuery
@@ -62,6 +65,22 @@ class NewsArticelViewModel @Inject constructor(
         viewModelScope.launch {
             setLoading(true)
             getHeadlinesNewsUseCase.loadMore()
+        }
+    }
+
+    fun addFavoriteNews(data: HeadlineNews){
+        viewModelScope.launch {
+            setFavoriteNewsUseCase.execute(
+                input = SetFavoriteNewsUseCase.Input(data),
+                output = SetFavoriteNewsUseCase.Output(
+                    success = {
+                        addFavoriteEvent.value = Event(Any())
+                    },
+                    error = {
+                        errorArticelEvent.value = Event(it)
+                    }
+                )
+            )
         }
     }
 

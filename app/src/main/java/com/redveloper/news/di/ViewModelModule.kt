@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.redveloper.news.ui.ViewModelFactory
 import com.redveloper.news.ui.articel.NewsArticelViewModel
 import com.redveloper.news.ui.category.CategoryNewsViewModel
+import com.redveloper.news.ui.favorite.FavoriteNewsViewModel
 import com.redveloper.news.ui.source.SourceNewsViewModel
 import dagger.Binds
 import dagger.Module
@@ -32,4 +33,9 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(NewsArticelViewModel::class)
     abstract fun bindNewsArticelViewModel(viewModel: NewsArticelViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(FavoriteNewsViewModel::class)
+    abstract fun bindFavoriteNewsViewModel(viewModel: FavoriteNewsViewModel): ViewModel
 }

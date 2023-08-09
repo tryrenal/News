@@ -1,5 +1,7 @@
 package com.redveloper.news.ui.category
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -10,10 +12,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -29,11 +36,9 @@ import com.redveloper.news.MyApp
 import com.redveloper.news.R
 import com.redveloper.news.domain.enums.NewsCategoryEnum
 import com.redveloper.news.ui.ViewModelFactory
-import com.redveloper.news.ui.articel.NewsArticelActivity
 import com.redveloper.news.ui.components.CardCategory
 import com.redveloper.news.ui.source.SourceNewsActivity
 import com.redveloper.news.ui.theme.NewsTheme
-import com.redveloper.news.utils.Event
 import javax.inject.Inject
 
 class CategoryNewsActivity : ComponentActivity() {
@@ -73,26 +78,51 @@ class CategoryNewsActivity : ComponentActivity() {
                             .fillMaxSize(),
                         onCategorySelected = {
                             SourceNewsActivity.navigate(this, it)
+                        },
+                        onBackPress = {
+                            finish()
                         }
                     )
                 }
             }
         }
     }
+
+    companion object{
+        fun navigate(activity: Activity){
+            val intent = Intent(activity, CategoryNewsActivity::class.java)
+            activity.startActivity(intent)
+        }
+    }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CategoryNewsScreen(
     categoryNews: List<NewsCategoryEnum>,
     modifier: Modifier = Modifier,
-    onCategorySelected: (NewsCategoryEnum) -> Unit
+    onCategorySelected: (NewsCategoryEnum) -> Unit,
+    onBackPress: () -> Unit
 ) {
-
-
 
     Scaffold(
         modifier = modifier
-            .fillMaxSize()
+            .fillMaxSize(),
+        topBar = {
+            TopAppBar(
+                title = {},
+                navigationIcon = {
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = "",
+                        modifier = Modifier
+                            .clickable {
+                                onBackPress()
+                            }
+                    )
+                }
+            )
+        }
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -135,6 +165,9 @@ fun PreviewCategoryNewsScreen(){
         CategoryNewsScreen(
             categoryNews = categorys,
             onCategorySelected = {
+
+            },
+            onBackPress = {
 
             }
         )

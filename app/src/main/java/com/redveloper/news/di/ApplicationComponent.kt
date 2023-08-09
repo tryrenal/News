@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.redveloper.news.MyApp
 import com.redveloper.news.ui.articel.NewsArticelActivity
 import com.redveloper.news.ui.category.CategoryNewsActivity
+import com.redveloper.news.ui.favorite.FavoriteNewsActivity
 import com.redveloper.news.ui.source.SourceNewsActivity
 import dagger.BindsInstance
 import dagger.Component
@@ -35,4 +36,5 @@ interface ApplicationComponent {
     fun inject(categoryNewsActivity: CategoryNewsActivity)
     fun inject(sourcesNewsActivity: SourceNewsActivity)
     fun inject(newsArticelActivity: NewsArticelActivity)
+    fun inject(favoriteNewsActivity: FavoriteNewsActivity)
 }

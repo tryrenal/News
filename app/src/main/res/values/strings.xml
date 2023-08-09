@@ -5,4 +5,6 @@
     <string name="title_activity_webview">WebviewActivity</string>
 
     <string name="category">Category</string>
+    <string name="title_activity_favorite_news">FavoriteNewsActivity</string>
+    <string name="title_activity_main">MainActivity</string>
 </resources>

@@ -77,6 +77,7 @@ class NewsArticelActivity : ComponentActivity() {
                     val searchArticelEvent by viewModel.searchResult.observeAsState()
                     val errorArticelEvent by viewModel.errorArticelEvent.observeAsState()
                     val loadingEvent by viewModel.loadingEvent.observeAsState()
+                    val addFavoriteEvent by viewModel.addFavoriteEvent.observeAsState()
 
                     val articels = remember { mutableListOf<HeadlineNews>() }
 
@@ -86,6 +87,10 @@ class NewsArticelActivity : ComponentActivity() {
 
                     errorArticelEvent?.contentIfNotHaveBeenHandle?.let {
                         Toast.makeText(LocalContext.current, it, Toast.LENGTH_SHORT).show()
+                    }
+
+                    addFavoriteEvent?.contentIfNotHaveBeenHandle?.let {
+                        Toast.makeText(LocalContext.current, "success add favorite", Toast.LENGTH_SHORT).show()
                     }
 
                     searchArticelEvent?.contentIfNotHaveBeenHandle?.let { query ->
@@ -118,6 +123,9 @@ class NewsArticelActivity : ComponentActivity() {
                         },
                         onBackPress = {
                             finish()
+                        },
+                        onAddFavorite = { data ->
+                            viewModel.addFavoriteNews(data)
                         }
                     )
 
@@ -153,7 +161,8 @@ fun NewsArticelScreen(
     onLoadMore: () -> Unit,
     onSelectedArticel: (url: String) -> Unit,
     onSearch: (String) -> Unit,
-    onBackPress: () -> Unit
+    onBackPress: () -> Unit,
+    onAddFavorite: (data: HeadlineNews) -> Unit
 ) {
 
     val listState = rememberLazyListState()
@@ -217,7 +226,11 @@ fun NewsArticelScreen(
                                     data.url?.let {
                                         onSelectedArticel.invoke(it)
                                     }
-                                }
+                                },
+                            textFavorite = "favorite",
+                            favoriteClick = {
+                                onAddFavorite.invoke(data)
+                            }
                         )
                     }
                 }
@@ -260,6 +273,9 @@ fun PreviewNewsArticelScreen(){
 
             },
             onBackPress = {
+
+            },
+            onAddFavorite = {
 
             }
         )

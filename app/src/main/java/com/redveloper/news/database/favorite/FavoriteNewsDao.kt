@@ -14,6 +14,6 @@ interface FavoriteNewsDao{
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun inserFavoriteNews(data: FavoriteNewsEntity)
 
-    @Query("DELETE FROM favorite_news WHERE id = :newsId")
-    suspend fun deleteFavoriteNews(newsId: Int)
+    @Query("DELETE FROM favorite_news WHERE url = :url")
+    suspend fun deleteFavoriteNews(url: String)
 }

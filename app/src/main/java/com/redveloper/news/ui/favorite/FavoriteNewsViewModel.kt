@@ -34,10 +34,10 @@ class FavoriteNewsViewModel @Inject constructor(
         }
     }
 
-    fun clearFavoriteNews(newsId: Int){
+    fun clearFavoriteNews(url: String){
         viewModelScope.launch {
             clearFavoriteNewsUseCase.execute(
-                newsId = newsId,
+                url = url,
                 output = ClearFavoriteNewsUseCase.Output(
                     success = {
                         clearFavoriteEVent.value = Event(Any())

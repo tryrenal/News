@@ -2,17 +2,17 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "a1cb37f9cf41a69587cb254670efb8cd",
+    "identityHash": "fbb5523b74aa3971fe5edf17182e7608",
     "entities": [
       {
         "tableName": "favorite_news",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `source_id` TEXT NOT NULL, `source_name` TEXT NOT NULL, `author` TEXT NOT NULL, `title` TEXT NOT NULL, `description` TEXT NOT NULL, `url` TEXT NOT NULL, `url_to_image` TEXT NOT NULL, `content` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`url` TEXT NOT NULL, `source_id` TEXT NOT NULL, `source_name` TEXT NOT NULL, `author` TEXT NOT NULL, `title` TEXT NOT NULL, `description` TEXT NOT NULL, `url_to_image` TEXT NOT NULL, `content` TEXT NOT NULL, PRIMARY KEY(`url`))",
         "fields": [
           {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": false
+            "fieldPath": "url",
+            "columnName": "url",
+            "affinity": "TEXT",
+            "notNull": true
           },
           {
             "fieldPath": "sourceId",
@@ -45,12 +45,6 @@
             "notNull": true
           },
           {
-            "fieldPath": "url",
-            "columnName": "url",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
             "fieldPath": "urlToImage",
             "columnName": "url_to_image",
             "affinity": "TEXT",
@@ -64,9 +58,9 @@
           }
         ],
         "primaryKey": {
-          "autoGenerate": true,
+          "autoGenerate": false,
           "columnNames": [
-            "id"
+            "url"
           ]
         },
         "indices": [],
@@ -76,7 +70,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a1cb37f9cf41a69587cb254670efb8cd')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'fbb5523b74aa3971fe5edf17182e7608')"
     ]
   }
 }

@@ -8,8 +8,8 @@ class ClearFavoriteNewsUseCase @Inject constructor(
     private val newsRespository: NewsRespository
 ) {
 
-    suspend fun execute(newsId: Int, output: Output){
-        val result = newsRespository.deleteFavoriteNews(newsId)
+    suspend fun execute(url: String, output: Output){
+        val result = newsRespository.deleteFavoriteNews(url)
 
         when(result){
             is Result.Success -> {

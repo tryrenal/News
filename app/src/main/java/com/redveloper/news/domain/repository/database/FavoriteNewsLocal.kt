@@ -6,5 +6,5 @@ import kotlinx.coroutines.flow.Flow
 interface FavoriteNewsLocal {
     fun getFavoritesNews(): Flow<List<HeadlineNews>>
     suspend fun insertFavoriteNews(data: HeadlineNews)
-    suspend fun deleteFavoriteNews(newsId: Int)
+    suspend fun deleteFavoriteNews(url: String)
 }

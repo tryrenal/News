@@ -14,7 +14,6 @@ class FavoriteNewsLocalImpl @Inject constructor(
         return favoriteNewsDao.getFavoritesNews().map {
             it.map {
                 HeadlineNews(
-                    id = it.id  ?: 0,
                     source = Item(
                         id = it.sourceId,
                         name = it.sourceName
@@ -44,7 +43,7 @@ class FavoriteNewsLocalImpl @Inject constructor(
         return favoriteNewsDao.inserFavoriteNews(entity)
     }
 
-    override suspend fun deleteFavoriteNews(newsId: Int) {
-        return favoriteNewsDao.deleteFavoriteNews(newsId)
+    override suspend fun deleteFavoriteNews( url: String) {
+        return favoriteNewsDao.deleteFavoriteNews(url)
     }
 }

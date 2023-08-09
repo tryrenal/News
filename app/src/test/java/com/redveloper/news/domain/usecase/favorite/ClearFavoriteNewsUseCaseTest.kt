@@ -27,14 +27,14 @@ class ClearFavoriteNewsUseCaseTest {
     @Test
     fun testErrorClearFavoriteNews() = runBlocking{
         val errorMessage = "error clear data"
-        val newsId = 10
+        val url = "url"
         val output = ClearFavoriteNewsUseCase.Output(
             mock(), mock()
         )
 
-        whenever(newsRespository.deleteFavoriteNews(newsId)).thenReturn(Result.Error(errorMessage))
+        whenever(newsRespository.deleteFavoriteNews(url)).thenReturn(Result.Error(errorMessage))
 
-        useCase.execute(newsId, output)
+        useCase.execute(url, output)
 
         verify(output.error).invoke(errorMessage)
         verify(output.success, never()).invoke()
@@ -45,11 +45,11 @@ class ClearFavoriteNewsUseCaseTest {
         val output = ClearFavoriteNewsUseCase.Output(
             mock(), mock()
         )
-        val newsId = 10
+        val url = "url"
 
-        whenever(newsRespository.deleteFavoriteNews(newsId)).thenReturn(Result.Success(Unit))
+        whenever(newsRespository.deleteFavoriteNews(url)).thenReturn(Result.Success(Unit))
 
-        useCase.execute(newsId, output)
+        useCase.execute(url, output)
 
         verify(output.error, never()).invoke(any())
         verify(output.success).invoke()

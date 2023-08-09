@@ -76,6 +76,9 @@ class FavoriteNewsActivity : ComponentActivity() {
                     }
 
                     clearFavoriteNewsUseCase?.contentIfNotHaveBeenHandle?.let {
+                        favorites.clear()
+                        viewModel.getFavoritesNews()
+
                         Toast.makeText(LocalContext.current, "Success Clear", Toast.LENGTH_SHORT).show()
                     }
 
@@ -95,8 +98,8 @@ class FavoriteNewsActivity : ComponentActivity() {
                         onBackPress = {
                             finish()
                         },
-                        onClearFavorite = { newsId ->
-                            viewModel.clearFavoriteNews(newsId)
+                        onClearFavorite = { url ->
+                            viewModel.clearFavoriteNews(url)
                         }
                     )
                 }
@@ -119,7 +122,7 @@ fun FavoriteNewsScreen(
     articels: List<HeadlineNews>,
     onSelectedArticel: (url: String) -> Unit,
     onBackPress: () -> Unit,
-    onClearFavorite: (newsId: Int) -> Unit
+    onClearFavorite: (url: String) -> Unit
 ){
     val listState = rememberLazyListState()
 
@@ -167,7 +170,9 @@ fun FavoriteNewsScreen(
                             },
                         textFavorite = "hapus favorite",
                         favoriteClick = {
-                            onClearFavorite.invoke(data.id)
+                            data.url?.let {
+                                onClearFavorite.invoke(data.url)
+                            }
                         }
                     )
                 }

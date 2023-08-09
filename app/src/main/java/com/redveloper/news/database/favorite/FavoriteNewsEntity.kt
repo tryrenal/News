@@ -6,9 +6,9 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "favorite_news")
 data class FavoriteNewsEntity(
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
-    val id: Int? = null,
+    @PrimaryKey
+    @ColumnInfo(name ="url")
+    val url: String,
     @ColumnInfo(name = "source_id")
     val sourceId: String,
     @ColumnInfo(name = "source_name")
@@ -19,8 +19,6 @@ data class FavoriteNewsEntity(
     val title: String,
     @ColumnInfo(name = "description")
     val description: String,
-    @ColumnInfo(name ="url")
-    val url: String,
     @ColumnInfo(name = "url_to_image")
     val urlToImage: String,
     @ColumnInfo(name = "content")

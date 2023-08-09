@@ -68,10 +68,10 @@ class NewsRespository @Inject constructor(
         }
     }
 
-    suspend fun deleteFavoriteNews(id: Int): Result<Unit>{
+    suspend fun deleteFavoriteNews(url: String): Result<Unit>{
         return try {
             withContext(Dispatchers.IO){
-                favoriteNewsLocal.deleteFavoriteNews(newsId = id)
+                favoriteNewsLocal.deleteFavoriteNews(url)
             }
             Result.Success(Unit)
         } catch (e: Exception){

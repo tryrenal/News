@@ -3,8 +3,6 @@ package com.redveloper.news.api.response.headline
 import com.google.gson.annotations.SerializedName
 import com.redveloper.news.api.response.ItemResponse
 import com.redveloper.news.domain.model.HeadlineNews
-import com.redveloper.news.utils.convertStrDateToDate
-import java.util.Date
 
 data class HeadlinesNewsResponse(
     @SerializedName("source")
@@ -19,8 +17,6 @@ data class HeadlinesNewsResponse(
     val url: String?,
     @SerializedName("urlToImage")
     val urlToImage: String?,
-    @SerializedName("publishedAt")
-    val publishedAt: String?,
     @SerializedName("content")
     val content: String?
 ){
@@ -32,8 +28,6 @@ data class HeadlinesNewsResponse(
             description = description,
             url = url,
             urlToImage = urlToImage,
-            publishedAt = if (!publishedAt.isNullOrBlank())
-                convertStrDateToDate(publishedAt) else Date(),
             content = content
         )
     }

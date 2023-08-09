@@ -3,4 +3,6 @@
     <string name="title_activity_category_news">CategoryNewsActivity</string>
     <string name="title_activity_news_articel">NewsArticelActivity</string>
     <string name="title_activity_webview">WebviewActivity</string>
+
+    <string name="category">Category</string>
 </resources>

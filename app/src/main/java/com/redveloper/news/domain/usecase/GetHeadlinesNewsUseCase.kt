@@ -1,6 +1,5 @@
 package com.redveloper.news.domain.usecase
 
-import android.util.Log
 import com.redveloper.news.domain.model.HeadlineNews
 import com.redveloper.news.domain.repository.NewsRespository
 import com.redveloper.news.domain.repository.Result
@@ -54,7 +53,6 @@ class GetHeadlinesNewsUseCase @Inject constructor(
                     output?.success?.invoke(rootData.articels)
                 }
                 is Result.Error -> {
-                    Log.i("errorGetHeadline", result.message)
                     output?.error?.invoke(result.message)
                 }
             }

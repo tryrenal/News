@@ -26,12 +26,11 @@
         <activity
             android:name=".ui.articel.NewsArticelActivity"
             android:exported="false"
-            android:label="@string/title_activity_news_articel"
             android:theme="@style/Theme.News" />
         <activity
             android:name=".ui.category.CategoryNewsActivity"
             android:exported="true"
-            android:label="@string/title_activity_category_news"
+            android:label="@string/app_name"
             android:theme="@style/Theme.News">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -42,7 +41,6 @@
         <activity
             android:name=".ui.source.SourceNewsActivity"
             android:exported="false"
-            android:label="@string/app_name"
             android:theme="@style/Theme.News" />
     </application>
 

@@ -45,7 +45,6 @@ class GetFavoritesNewsUseCaseTest {
     fun testSuccessGetFavoriteNews() = runBlocking {
         val data = listOf(
             HeadlineNews(
-                id = Random.nextInt(),
                 source = Item(
                     id = RandomString.make(),
                     name = RandomString.make()

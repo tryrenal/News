@@ -9,9 +9,12 @@ import com.redveloper.news.domain.repository.database.FavoriteNewsLocal
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.single
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -49,12 +52,17 @@ class NewsRespository @Inject constructor(
     }
 
     fun getFavoritesNews(): Flow<Result<List<HeadlineNews>>>{
-        return favoriteNewsLocal.getFavoritesNews()
-            .map { Result.Success(it) }
-            .catch {
-                Result.Error(it.message.toString())
+        return flow {
+            try {
+                val favorites = mutableListOf<HeadlineNews>()
+                favoriteNewsLocal.getFavoritesNews().collect {
+                    favorites.addAll(it)
+                }
+                emit(Result.Success(favorites))
+            }catch (e: Exception){
+                emit(Result.Error(e.message.toString()))
             }
-            .flowOn(Dispatchers.IO)
+        }.flowOn(Dispatchers.IO)
     }
 
     suspend fun insertFavoriteNews(data: HeadlineNews): Result<Unit> {

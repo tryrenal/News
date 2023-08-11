@@ -52,17 +52,15 @@ class NewsRespository @Inject constructor(
     }
 
     fun getFavoritesNews(): Flow<Result<List<HeadlineNews>>>{
-        return flow {
-            try {
-                val favorites = mutableListOf<HeadlineNews>()
-                favoriteNewsLocal.getFavoritesNews().collect {
-                    favorites.addAll(it)
-                }
-                emit(Result.Success(favorites))
-            }catch (e: Exception){
-                emit(Result.Error(e.message.toString()))
+        return favoriteNewsLocal
+            .getFavoritesNews()
+            .map {
+                Result.Success(it)
             }
-        }.flowOn(Dispatchers.IO)
+            .catch {
+                Result.Error(it.message.toString())
+            }
+            .flowOn(Dispatchers.IO)
     }
 
     suspend fun insertFavoriteNews(data: HeadlineNews): Result<Unit> {

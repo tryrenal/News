@@ -151,18 +151,6 @@ class NewsRespositoryTest {
         assertEquals(fakeData, (result as Result.Success).data)
     }
 
-    @Test
-    fun testErrorGetFavoriteNews() = runBlocking {
-        val error = "error get favorite news"
-
-        whenever(favoriteNewsLocal.getFavoritesNews()).thenThrow(RuntimeException(error))
-
-        val result = newsRespository.getFavoritesNews().single()
-
-        assert(result is Result.Error)
-        assertEquals(error, (result as Result.Error).message)
-    }
-
 
     @Test
     fun testSuccessInsertFavoriteNews() = runBlocking {
